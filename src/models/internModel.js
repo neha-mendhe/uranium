@@ -19,7 +19,9 @@ const internSchema= new mongoose.Schema({
         }
     },
     mobile:{
-        type:Number, min: 10, max: 10,
+        // type:Number, min: 10, max: 10,
+        type:Number,
+        match: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/,
         required:'Mobile no is required',
         unique:true,
 
