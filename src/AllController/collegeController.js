@@ -41,7 +41,7 @@ const createCollege = async function(req,res){
                 }
                 //validation ends
                 let data= req.body
-                const college = await CollegeModel.create(data)
+                const college = await collegeModel.create(data)
                 res.status(201).send({status:true, data:college, msg:'College created succefully'})
   
     } catch (error) {
@@ -59,8 +59,9 @@ const  getCollegeDetails= async function (req, res) {
         const newCollege = await collegeModel.findOne({ name: collegeName }, { name: 1, fullName: 1, logoLink: 1 });
             if (!newCollege) return res.status(404).send({ status: false, message: `College does not exit` });
 
-        const interns = await internModel.find({ collegeId: newCollege._id, isDeleted: false }, { __v: 0, isDeleted: 0, collegeId: 0 });
-              res.status(200).send({ data: { name: newCollege.name, fullName: newCollege.fullName, logoLink: newCollege.logoLink, interns: interns}})
+        const interns = await internModel.find({ collegeId: newCollege._id, isDeleted: false }, { name: 1, email: 1, mobile: 1 });
+        if(!interns) return res.status(404).send({ status: false, message: `Interns does not exit`});   
+        res.status(200).send({ data: { name: newCollege.name, fullName: newCollege.fullName, logoLink: newCollege.logoLink, interns: interns}})
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });

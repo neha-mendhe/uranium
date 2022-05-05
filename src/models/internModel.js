@@ -21,10 +21,13 @@ const internSchema= new mongoose.Schema({
     mobile:{
         
         type:Number,
-        match: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/,
         required:'Mobile no is required',
         unique:true,
-
+        alidate: {
+            validator:
+                function (m) { return /^(\()?\d{3}(\))?(|\s)?\d{3}(|\s)\d{4}$/.test(m) },
+            message: "Please Enter 10 digit Mobile Number",
+        },
     },
     collegeId:{
         type:ObjectId,
