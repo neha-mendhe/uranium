@@ -11,6 +11,8 @@ const isValidRequestBody = function(requestBody){
     return Object.keys(requestBody).length > 0
 }
 
+//------------------PUT API CREATECOLLEGE--------------------------------------------------
+
 const createCollege = async function(req,res){
     try {
         const requestBody=req.body
@@ -46,22 +48,24 @@ const createCollege = async function(req,res){
         res.status(500).send({status:false, message:error.message})
     }
 }
-//-------------------------COLLEGE DETAILS---------------------------------------
+
+//-------------------------GET API COLLEGE DETAILS---------------------------------------
+
 const  getCollegeDetails= async function (req, res) {
     try {
         const collegeName = req.query.name
         if (!collegeName) return res.status(400).send({ status: false, message: 'College name is required to access data' })
       
         const newCollege = await collegeModel.findOne({ name: collegeName }, { name: 1, fullName: 1, logoLink: 1 });
+            if (!newCollege) return res.status(404).send({ status: false, message: `College does not exit` });
 
-        if (!newCollege) return res.status(404).send({ status: false, message: `College does not exit` });
         const interns = await internModel.find({ collegeId: newCollege._id, isDeleted: false }, { __v: 0, isDeleted: 0, collegeId: 0 });
-        res.status(200).send({ data: { name: newCollege.name, fullName: newCollege.fullName, logoLink: newCollege.logoLink, interns: interns}})
+              res.status(200).send({ data: { name: newCollege.name, fullName: newCollege.fullName, logoLink: newCollege.logoLink, interns: interns}})
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
 }
 
-module.exports.createCollege=createCollege
-module.exports.getCollegeDetails= getCollegeDetails
+module.exports.createCollege = createCollege
+module.exports.getCollegeDetails = getCollegeDetails

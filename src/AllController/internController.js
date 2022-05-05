@@ -11,6 +11,9 @@ const isValidRequestBody = function(requestBody) {
     return Object.keys(requestBody).length > 0
 }
 
+
+//---------------------CREATE INTERN -------------------------------
+
 const createIntern = async function(req,res){
     try {
         const requestBody = req.body;

@@ -22,4 +22,5 @@ const mongoose = require('mongoose');
          default:false
      }
  })
+ 
  module.exports = mongoose.model('College', collegeSchema)
