@@ -41,7 +41,7 @@ const createCollege = async function(req,res){
                 }
                 //validation ends
                 let data= req.body
-                const college = await CollegeModel.create(data)
+                const college = await collegeModel.create(data)
                 res.status(201).send({status:true, data:college, msg:'College created succefully'})
   
     } catch (error) {
