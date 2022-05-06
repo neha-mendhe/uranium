@@ -1,6 +1,11 @@
 const collegeModel=require('../models/collegeModel')
 const internModel = require('../models/internModel')
 
+
+
+
+//-----------Request Body Validation------------------------
+
 const isValid=function(value){
     if(typeof value === 'undefined' || value === null) return false
     if(typeof value === 'string' && value.trim().length === 0) return false
@@ -39,6 +44,15 @@ const createCollege = async function(req,res){
                     res.status(400).send({status:false, message: `Logolink is required`})
                     return
                 }
+                const isValidUrl = function (v) { return /^(http(s)?:\/\/)?(www.)?([a-zA-Z0-9])+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/[^\s]*)?$/.test(v) }
+                     if (!isValidUrl(logoLink)) return res.status(400).send({ status: false, message: 'logolink is invalid' })
+               
+                const collegenameAlreadyUsed = await collegeModel.findOne({ name });
+                 if (collegenameAlreadyUsed) {
+                    return res.status(400).send({ status: false, message: `${name} college name is already registered` })
+                }
+
+                
                 //validation ends
                 let data= req.body
                 const college = await collegeModel.create(data)

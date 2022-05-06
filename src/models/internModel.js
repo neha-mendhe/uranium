@@ -1,6 +1,8 @@
 const { default: mongoose } = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId
 
+//------------Intern Schema---------------------------
+
 const internSchema= new mongoose.Schema({
     name:{
         type:String,

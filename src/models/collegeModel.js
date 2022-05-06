@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+
+//--------------College Schema-------------------
+
  const collegeSchema = new mongoose.Schema({
      name:{
          type:String,
