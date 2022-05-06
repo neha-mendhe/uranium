@@ -1,6 +1,11 @@
 const collegeModel=require('../models/collegeModel')
 const internModel = require('../models/internModel')
 
+
+
+
+//-----------Request Body Validation------------------------
+
 const isValid=function(value){
     if(typeof value === 'undefined' || value === null) return false
     if(typeof value === 'string' && value.trim().length === 0) return false
@@ -39,6 +44,15 @@ const createCollege = async function(req,res){
                     res.status(400).send({status:false, message: `Logolink is required`})
                     return
                 }
+                const isValidUrl = function (v) { return /^(http(s)?:\/\/)?(www.)?([a-zA-Z0-9])+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/[^\s]*)?$/.test(v) }
+                     if (!isValidUrl(logoLink)) return res.status(400).send({ status: false, message: 'logolink is invalid' })
+               
+                const collegenameAlreadyUsed = await collegeModel.findOne({ name });
+                 if (collegenameAlreadyUsed) {
+                    return res.status(400).send({ status: false, message: `${name} college name is already registered` })
+                }
+
+                
                 //validation ends
                 let data= req.body
                 const college = await collegeModel.create(data)
@@ -59,8 +73,9 @@ const  getCollegeDetails= async function (req, res) {
         const newCollege = await collegeModel.findOne({ name: collegeName }, { name: 1, fullName: 1, logoLink: 1 });
             if (!newCollege) return res.status(404).send({ status: false, message: `College does not exit` });
 
-        const interns = await internModel.find({ collegeId: newCollege._id, isDeleted: false }, { __v: 0, isDeleted: 0, collegeId: 0 });
-              res.status(200).send({ data: { name: newCollege.name, fullName: newCollege.fullName, logoLink: newCollege.logoLink, interns: interns}})
+        const interns = await internModel.find({ collegeId: newCollege._id, isDeleted: false }, { name: 1, email: 1, mobile: 1 });
+        if(!interns) return res.status(404).send({ status: false, message: `Interns does not exit`});   
+        res.status(200).send({ data: { name: newCollege.name, fullName: newCollege.fullName, logoLink: newCollege.logoLink, interns: interns}})
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
