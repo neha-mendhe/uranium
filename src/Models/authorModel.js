@@ -23,11 +23,11 @@ const authorSchema = new mongoose.Schema({
         required:'Email address is required',
         unique: true,
         trim: true,
-        validate:{
-            validator: function(email){
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
-            },message:'Please fill a valid email address', isAsync:false
-        }
+        // validate:{
+        //     validator: function(email){
+        //         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+        //     },message:'Please fill a valid email address', isAsync:false
+        // }
     },
     password: {
         type: String,
